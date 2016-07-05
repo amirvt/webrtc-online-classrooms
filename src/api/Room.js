@@ -2,7 +2,7 @@ import {endScreenCam, recvScreenCam} from '../actions/screenCamActions';
 import {recvWebCam, endWebCam} from '../actions/webCamActions';
 import {addUser, removeUser} from '../actions/userActions';
 import {addMessage} from '../actions/chatActions';
-import {setFileB64, setPageLocal, setSnapShotLocal} from '../actions/whiteBoardActions';
+// import {setPdfFileB64, setPageLocal, setSnapShotLocal} from '../actions/whiteBoardActions';
 
 export const StreamType = {
   WEB_CAM: "WEB_CAM",
@@ -91,15 +91,16 @@ export default class Room {
         stream.addEventListener('stream-data', event => {
           let {username, type} = event.stream.getAttributes();
           if (type === StreamType.CHAT) {
-            if (event.msg.type === "CHAT")
+            if (event.msg.type === "CHAT") {
               this._addMessage(event.msg, username);
-            else if (event.msg.type === "FILE") {
-              this._setFile(event.msg.b64String);
-            } else if (event.msg.type === "PAGE_NUMBER") {
-              this._dispatch(setPageLocal(event.msg.pageNumber));
-            } else if (event.msg.type === "SNAPSHOT") {
-              this._dispatch(setSnapShotLocal(event.msg.snapShot));
             }
+            // else if (event.msg.type === "FILE") {
+            //   this._setFile(event.msg.b64String);
+            // } else if (event.msg.type === "PAGE_NUMBER") {
+            //   this._dispatch(setPageLocal(event.msg.pageNumber));
+            // } else if (event.msg.type === "SNAPSHOT") {
+            //   this._dispatch(setSnapShotLocal(event.msg.snapShot));
+            // }
           }
         });
       }
@@ -164,26 +165,26 @@ export default class Room {
     });
   }
 
-  syncFile(b64String) {
-    this._chatStream.sendData({
-      b64String,
-      type: "FILE"
-    });
-  }
-
-  sendSetPage(pageNumber) {
-    this._chatStream.sendData({
-      pageNumber,
-      type: "PAGE_NUMBER"
-    });
-  }
-
-  syncSnapShot(snapShot) {
-    this._chatStream.sendData({
-      snapShot,
-      type: "SNAPSHOT"
-    });
-  }
+  // syncFile(b64String) {
+  //   this._chatStream.sendData({
+  //     b64String,
+  //     type: "FILE"
+  //   });
+  // }
+  //
+  // sendSetPage(pageNumber) {
+  //   this._chatStream.sendData({
+  //     pageNumber,
+  //     type: "PAGE_NUMBER"
+  //   });
+  // }
+  //
+  // syncSnapShot(snapShot) {
+  //   this._chatStream.sendData({
+  //     snapShot,
+  //     type: "SNAPSHOT"
+  //   });
+  // }
 
   _dispatchEndVideoStream(type) {
     if (type === StreamType.WEB_CAM) {
@@ -213,7 +214,7 @@ export default class Room {
     }
   }
 
-  _setFile(b64String) {
-    this._dispatch(setFileB64(b64String));
-  }
+  // _setFile(b64String) {
+  //   this._dispatch(setPdfFileB64(b64String));
+  // }
 }

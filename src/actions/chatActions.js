@@ -8,7 +8,7 @@ export function addMessage(message){
 }
 
 export function sendMessage(text){
-  return (dispatch, getState, room) => {
+  return (dispatch, getState, {room}) => {
     room.sendMessage(text);
     dispatch(addMessage({text}));
   };

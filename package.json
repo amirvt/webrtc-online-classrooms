@@ -21,7 +21,7 @@
     "test:watch": "npm run test -- --watch"
   },
   "author": "Amir Vakili",
-  "license": "GPL v3",
+  "license": "GNU GPL v3",
   "dependencies": {
     "http-proxy-middleware": "0.17.0",
     "literallycanvas": "latest",
@@ -42,6 +42,7 @@
     "redux": "3.5.2",
     "redux-logger": "^2.6.1",
     "redux-thunk": "2.1.0",
+    "socket.io-client": "1.4.8",
     "url": "0.11.0",
     "yargs": "4.7.1"
   },

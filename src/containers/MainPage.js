@@ -38,7 +38,9 @@ const MainPage = (props) => {
                  webCamActions={props.webCamActions}
                  screenCamMode={props.screenCamMode}
                  webCamMode={props.webCamMode}
-                 whiteBoardActions={props.whiteBoardActions}/>
+                 whiteBoardActions={props.whiteBoardActions}
+                 presentationMode={props.whiteBoardInfo.presentationMode}
+      />
 
       <ReactGridLayout className="layout" layout={layout}
                        cols={12} rowHeight={50} width={1200}
@@ -68,7 +70,7 @@ MainPage.propTypes = {
   chatActions: PropTypes.object.isRequired,
   userActions: PropTypes.object.isRequired,
   tokenActions: PropTypes.object.isRequired,
-  whiteboadActions: PropTypes.object.isRequired,
+  whiteBoardActions: PropTypes.object.isRequired,
   screenCamMode: PropTypes.string.isRequired,
   webCamMode: PropTypes.string.isRequired,
   roomInfo: PropTypes.object.isRequired,

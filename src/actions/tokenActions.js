@@ -27,8 +27,9 @@ export function getToken(username, roomName) {
 }
 
 export function getTokenSuccess(username, roomName, token, roomId) {
-  return (dispatch, getState, room) => {
+  return (dispatch, getState, {room, socketWrapper}) => {
     room.setupRoom({username, roomName, token, roomId});
+    socketWrapper.setUpSocket(roomName, username);
     dispatch({
       type: TokenAction.SUCCESS,
       roomInfo: {

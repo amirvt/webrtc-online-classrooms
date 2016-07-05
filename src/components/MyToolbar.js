@@ -7,16 +7,20 @@ import VideoCamOff from 'material-ui/svg-icons/av/videocam-off';
 import ScreenShare from 'material-ui/svg-icons/communication/screen-share';
 import StopScreenShare from 'material-ui/svg-icons/communication/stop-screen-share';
 import FileUpload from 'material-ui/svg-icons/file/file-upload';
+// import SlideShow from 'material-ui/svg-icons/image/slideshow'
+import SpeakerNotes from 'material-ui/svg-icons/action/speaker-notes';
+import SpeakerNotesOff from 'material-ui/svg-icons/action/speaker-notes-off';
 
 export default class MyToolBar extends Component {
   constructor(props) {
     super(props);
-    this.handleScreenCamTouchTap = this.handleScreenCamTouchTap.bind(this);
-    this.handleWebCamTouchTap = this.handleWebCamTouchTap.bind(this);
+    this._handleScreenCamTouchTap = this._handleScreenCamTouchTap.bind(this);
+    this._handleWebCamTouchTap = this._handleWebCamTouchTap.bind(this);
     this._handleFile = this._handleFile.bind(this);
+    this._handlePresentationButton = this._handlePresentationButton.bind(this);
   }
 
-  handleWebCamTouchTap(event) {
+  _handleWebCamTouchTap(event) {
     event.preventDefault();
     const {webCamMode, webCamActions} = this.props;
     if (webCamMode === "OFF")
@@ -25,7 +29,7 @@ export default class MyToolBar extends Component {
       webCamActions.endWebCam();
   }
 
-  handleScreenCamTouchTap(event) {
+  _handleScreenCamTouchTap(event) {
     event.preventDefault();
     const {screenCamMode, screenCamActions} = this.props;
     if (screenCamMode === "OFF")
@@ -34,16 +38,25 @@ export default class MyToolBar extends Component {
       screenCamActions.endScreenCam();
   }
 
+  _handlePresentationButton(event) {
+    event.preventDefault();
+    const {presentationMode, whiteBoardActions} = this.props;
+    if (presentationMode === "OFF")
+      whiteBoardActions.startPresentation();
+    else if (presentationMode === "ON")
+      whiteBoardActions.stopPresentation();
+  }
+
   webCamButton() {
     switch (this.props.webCamMode) {
       case "OFF":
         return (
-          <IconButton tooltip="start broadcasting video" onTouchTap={this.handleWebCamTouchTap}>
+          <IconButton tooltip="start broadcasting video" onTouchTap={this._handleWebCamTouchTap}>
             <VideoCam  />
           </IconButton> );
       case "ON":
         return (
-          <IconButton tooltip="stop broadcasting video" onTouchTap={this.handleWebCamTouchTap}>
+          <IconButton tooltip="stop broadcasting video" onTouchTap={this._handleWebCamTouchTap}>
             <VideoCamOff  />
           </IconButton>);
       case "RECV":
@@ -60,12 +73,12 @@ export default class MyToolBar extends Component {
     switch (this.props.screenCamMode) {
       case "OFF":
         return (
-          <IconButton tooltip="screen grab" onTouchTap={this.handleScreenCamTouchTap}>
+          <IconButton tooltip="screen grab" onTouchTap={this._handleScreenCamTouchTap}>
             <ScreenShare  />
           </IconButton> );
       case "ON":
         return (
-          <IconButton onTouchTap={this.handleScreenCamTouchTap}>
+          <IconButton onTouchTap={this._handleScreenCamTouchTap}>
             <StopScreenShare  />
           </IconButton>);
       case "RECV":
@@ -77,20 +90,41 @@ export default class MyToolBar extends Component {
     }
   }
 
-  _handleFile(e){
+  presentationButton() {
+    switch (this.props.presentationMode) {
+      case "OFF":
+        return (
+          <IconButton tooltip="start presentation" onTouchTap={this._handlePresentationButton}>
+            <SpeakerNotes  />
+          </IconButton> );
+      case "ON":
+        return (
+          <IconButton tooltip="stop presentation" onTouchTap={this._handlePresentationButton}>
+            <SpeakerNotesOff  />
+          </IconButton>);
+      case "RECV":
+      default:
+        return (
+          <IconButton disabled={true}>
+            <SpeakerNotes  />
+          </IconButton> );
+    }
+  }
+
+  _handleFile(e) {
     let file = e.target.files[0];
     if (file.size === 0) {
       alert('empty file');
       return;
     }
     this.props.whiteBoardActions.setFile(file);
-    
+
   }
 
   uploadButton() {
     return (
       <span>
-          <IconButton label="Upload file" onTouchTap={() => this._fileInput.click()}>
+          <IconButton label="Upload file" onTouchTap={() => this._fileInput.click()} disabled={this.props.presentationMode === "RECV"}>
               <FileUpload/>
           </IconButton>
           <input
@@ -110,6 +144,7 @@ export default class MyToolBar extends Component {
           {this.webCamButton()}
           {this.screenShareButton()}
           {this.uploadButton()}
+          {this.presentationButton()}
         </ToolbarGroup>
       </Toolbar>
     );
@@ -121,5 +156,6 @@ MyToolBar.propTypes = {
   webCamActions: PropTypes.object.isRequired,
   screenCamMode: PropTypes.string.isRequired,
   webCamMode: PropTypes.string.isRequired,
-  whiteBoardActions: PropTypes.object.isRequired
+  whiteBoardActions: PropTypes.object.isRequired,
+  presentationMode: PropTypes.string.isRequired
 };

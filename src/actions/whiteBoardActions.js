@@ -1,14 +1,63 @@
 import {WhiteBoardAction} from '../constants/actionTypes';
 import pdfjs from 'pdfjs-dist-for-node';
 
-
-export function setSnapShot(snapShot){
-  return (dispatch, getState, room) => {
-    room.syncSnapShot(snapShot);
+export function setWhiteBoardInfo(info) {
+  return dispatch => {
+    let {pdfFile, pageNumber, snapShot, presenter} = info;
+    if (presenter) {
+      dispatch(startPresentationSuccess(presenter));
+    }
+    if (pdfFile)
+      dispatch(setPdfFileB64(pdfFile, pageNumber || 0));
+    if (snapShot)
+      dispatch(setSnapShotLocal(snapShot));
+    if (pageNumber)
+      dispatch(setPageLocal(pageNumber));
   };
 }
 
-export function setSnapShotLocal(snapShot){
+export function startPresentation() {
+  return (dispatch, getState, {socketWrapper}) => {
+    socketWrapper.reqPresenter();
+  };
+}
+
+export function stopPresentation() {
+  return (dispatch, getState, {socketWrapper}) => {
+    socketWrapper.stopPresenter();
+    dispatch(stopPresentationSuccess());
+  };
+}
+
+export function startPresentationSuccess(presenter = null) {
+  return {
+    type: WhiteBoardAction.START_PRESENTATION_SUCCESS,
+    presenter
+  };
+}
+
+export function startPresentationReject() {
+  return {
+    type: WhiteBoardAction.START_PRESENTATION_REJECT
+  };
+}
+
+export function stopPresentationSuccess() {
+  return {
+    type: WhiteBoardAction.STOP_PRESENTATION
+  };
+}
+
+export function setSnapShot(snapShot) {
+  return (dispatch, getState, {socketWrapper}) => {
+    if (getState().whiteBoardInfo.presentationMode !== "RECV") {
+      socketWrapper.syncSnapShot(snapShot);
+    }
+
+  };
+}
+
+export function setSnapShotLocal(snapShot) {
   return {
     snapShot,
     type: WhiteBoardAction.SET_SHAPES
@@ -16,13 +65,15 @@ export function setSnapShotLocal(snapShot){
 }
 
 export function setPage(pageNumber) {
-  return (dispatch, getState, room) =>{
-    room.sendSetPage(pageNumber);
-    dispatch(setPageLocal(pageNumber));
+  return (dispatch, getState, {socketWrapper}) => {
+    if (getState().whiteBoardInfo.presentationMode !== "RECV") {
+      socketWrapper.syncPageNumber(pageNumber);
+      dispatch(setPageLocal(pageNumber));
+    }
   };
 }
 
-export function setPageLocal(pageNumber){
+export function setPageLocal(pageNumber) {
   return {
     type: WhiteBoardAction.SET_PAGE,
     pageNumber
@@ -30,16 +81,16 @@ export function setPageLocal(pageNumber){
 }
 
 
-export function resetPage(numPages) {
+export function resetNumPages(numPages) {
   return {
-    type: WhiteBoardAction.RESET_PAGE,
+    type: WhiteBoardAction.RESET_NUMPAGES,
     numPages
   };
 }
 
-const _extractImagesFromPdf = function (pdfDataObject, dispatch) {
+const _extractImagesFromPdf = function (pdfDataObject, dispatch, pageNumber = 0) {
   pdfjs.getDocument(pdfDataObject).then(function (pdf) {
-    dispatch(resetPage(pdf.numPages));
+    dispatch(resetNumPages(pdf.numPages));
     let imageDatas = [];
     for (let i = 1; i <= pdf.numPages; i++) {
 
@@ -63,6 +114,7 @@ const _extractImagesFromPdf = function (pdfDataObject, dispatch) {
           throw(e);
         }).then(function () {
           dispatch(setImages(imageDatas));
+          dispatch(setPageLocal(pageNumber));
         });
 
       });
@@ -74,7 +126,10 @@ const _extractImagesFromPdf = function (pdfDataObject, dispatch) {
 };
 
 export function setFile(file) {
-  return dispatch => {
+  return (dispatch, getState) => {
+    if (getState().whiteBoardInfo.presentationMode !== "RECV") {
+      return;
+    }
     dispatch(pdfConvertStart);
     dispatch(syncFile(file));
     let fileReader = new FileReader();
@@ -97,12 +152,12 @@ function _arrayBufferToBase64(buffer) {
 }
 
 export function syncFile(file) {
-  return (dispatch, getState, room) => {
+  return (dispatch, getState, {socketWrapper}) => {
     let fileReader = new FileReader();
     fileReader.onload = function () {
       let result = fileReader.result;
       const b64String = _arrayBufferToBase64(result);
-      room.syncFile(b64String);
+      socketWrapper.syncPdfFile(b64String);
     };
     fileReader.readAsArrayBuffer(file);
   };
@@ -121,10 +176,10 @@ function convertDataURIToBinary(b64String) {
   return array;
 }
 
-export function setFileB64(b64String) {
+export function setPdfFileB64(b64String, pageNumber) {
   return (dispatch) => {
     let pdfAsArray = convertDataURIToBinary(b64String);
-    _extractImagesFromPdf(pdfAsArray, dispatch);
+    _extractImagesFromPdf(pdfAsArray, dispatch, pageNumber);
   };
 
 

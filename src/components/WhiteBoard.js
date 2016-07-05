@@ -9,13 +9,13 @@ class WhiteBoard extends Component {
   constructor(props) {
     super(props);
     this._lc = null;
-    this._lcDrawEventUnSub = null;
+    this._lcDrawEventUnSub = () => {};
     this.nextSlide = this.nextSlide.bind(this);
     this.prevSlide = this.prevSlide.bind(this);
     this._lcInit = this._lcInit.bind(this);
   }
 
-  nextSlide(e){
+  nextSlide(e) {
     e.preventDefault();
     let {setPage} = this.props.whiteBoardActions;
     let {pageNumber, numPages} = this.props.whiteBoardInfo;
@@ -24,7 +24,7 @@ class WhiteBoard extends Component {
     }
   }
 
-  prevSlide(e){
+  prevSlide(e) {
     e.preventDefault();
     let {setPage} = this.props.whiteBoardActions;
     let {pageNumber} = this.props.whiteBoardInfo;
@@ -33,25 +33,17 @@ class WhiteBoard extends Component {
     }
   }
 
-  _lcDrawSub(){
-    if (!this._lcDrawEventUnSub && this._lc) {
-      this._lcDrawEventUnSub = this._lc.on('drawingChange', () => {
-        console.log("ayy");
-        this._lcDrawEventUnSub = this.props.whiteBoardActions.setSnapShot(JSON.stringify(this._lc.getSnapshot(['shapes'])));
-      });
 
-    }
-  }
 
-  _lcInit(lc){
+  _lcInit(lc) {
     this._lc = lc;
-    this._lcDrawSub();
   }
+
 
 
   render() {
-    console.log("wb render");
-    let {images, pageNumber, snapShot} = this.props.whiteBoardInfo;
+
+    let {images, pageNumber, presentationMode, snapShot, numPages} = this.props.whiteBoardInfo;
     let im;
     if (images.length !== 0) {
       // return (<img src={images[pageNumber]}/>);
@@ -59,27 +51,37 @@ class WhiteBoard extends Component {
       im.src = images[pageNumber];
       this._lc.setWatermarkImage(im);
     }
-    if (this._lc && snapShot) {
-        console.log("snapshot loaded!!");
-        this._lc.loadSnapshot(JSON.parse(snapShot));
+
+    if(presentationMode === "ON" && this._lc) {
+      const {setSnapShot} = this.props.whiteBoardActions;
+      this._lcDrawEventUnSub();
+      //setSnapShot(JSON.stringify(this._lc.getSnapshot(['shapes'])));
+      this._lcDrawEventUnSub = this._lc.on('drawingChange', () => {
+        setSnapShot(JSON.stringify(this._lc.getSnapshot(['shapes'])));
+      });
+
     }
 
-    this._lcDrawSub();
+    if (this._lc && snapShot && presentationMode === "RECV") {
+      this._lc.loadSnapshot(JSON.parse(snapShot));
+    }
+
 
     return (
       <div>
         <LiterallyCanvas.LiterallyCanvasReactComponent
           imageURLPrefix="public/lc"
-          onInit={this._lcInit}/>
+          onInit={this._lcInit}
+          snapshot={snapShot ? JSON.parse(snapShot) : {}}/>
         <Toolbar>
 
           <IconButton onTouchTap={this.prevSlide}>
-            <ChevronLeft  />
+            <ChevronLeft  disabled={presentationMode === "RECV"} />
           </IconButton>
 
-          {this.props.whiteBoardInfo.pageNumber + 1} / {this.props.whiteBoardInfo.numPages}
+          {pageNumber + 1} / {numPages}
           <IconButton onTouchTap={this.nextSlide}>
-            <ChevronRight  />
+            <ChevronRight disabled={presentationMode === "RECV"} />
           </IconButton>
         </Toolbar>
         <div style={{overflow: "hidden", position:"relative"}}>
@@ -95,7 +97,8 @@ WhiteBoard.propTypes = {
     images: PropTypes.array.isRequired,
     pageNumber: PropTypes.number.isRequired,
     numPages: PropTypes.number.isRequired,
-    snapShot: PropTypes.string
+    snapShot: PropTypes.string,
+    presentationMode: PropTypes.string
   }).isRequired,
   whiteBoardActions: PropTypes.object.isRequired
 };

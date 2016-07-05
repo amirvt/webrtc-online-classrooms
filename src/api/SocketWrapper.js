@@ -1,5 +1,7 @@
 import {SocketEvent} from '../../server/serverconstants';
-import {} from '../actions/whiteBoardActions';
+import {setWhiteBoardInfo, stopPresentationSuccess, setSnapShotLocal, setPdfFileB64, startPresentationSuccess, setPageLocal, startPresentationReject} from '../actions/whiteBoardActions';
+import io from 'socket.io-client';
+
 
 export default class SocketWrapper {
   constructor() {
@@ -12,56 +14,67 @@ export default class SocketWrapper {
     this._dispatch = dispatch;
   }
 
-  init(roomName, username) {
+  setUpSocket(roomName, username) {
     this._roomName = roomName;
     this._username = username;
-    this._socket = io.connect('http:localhost/3015');
-    this._socket.on('connect', function () {
+    this._socket = io('http://localhost:3015');
+    this._socket.on('connect',  () => {
       this._socket.emit(SocketEvent.JOIN_ROOM, roomName, username);
     });
-    this._socket.on(SocketEvent.ROOM_INFO, function (info) {
+    this._socket.on(SocketEvent.ROOM_INFO, (info) => {
       info = JSON.parse(info);
-      this._dispatchSetInfo(info);
+      if (info)
+        this._dispatchSetInfo(info);
     });
-    this._socket.on(SocketEvent.REJECT_PRESENTER, function () {
+    this._socket.on(SocketEvent.REJECT_PRESENTER, () => {
       this._dispatchRejectPresenter();
     });
-    this._socket.on(SocketEvent.PRESENTATION_START, function (username) {
+    this._socket.on(SocketEvent.PRESENTATION_START, (username) => {
       this._dispatchPresentationStart(username);
     });
-    this._socket.on(SocketEvent.PRESENTATION_STOP, function () {
+    this._socket.on(SocketEvent.ACCEPT_PRESENTER, () => {
+      this._dispatchPresentationStart();
+    });
+    this._socket.on(SocketEvent.PRESENTATION_STOP, () => {
       this._dispatchPresentationStop();
     });
-    this._socket.on(SocketEvent.SET_SNAPSHOT, function (snapShot) {
+    this._socket.on(SocketEvent.SET_SNAPSHOT, (snapShot) => {
       this._dispatchSetSnapShot(snapShot);
     });
-    this._socket.on(SocketEvent.SET_PDF_FILE, function (pdfFile) {
+    this._socket.on(SocketEvent.SET_PDF_FILE, (pdfFile) => {
       this._dispatchSetPdfFile(pdfFile);
     });
+    this._socket.on(SocketEvent.SET_PAGE, (pageNumber) => {
+      this._dispatchSetPage(pageNumber);
+    });
+  }
+
+  _dispatchSetPage(pageNumber) {
+    this._dispatch(setPageLocal(pageNumber));
   }
 
   _dispatchRejectPresenter() {
-
+    this._dispatch(startPresentationReject());
   }
 
-  _dispatchPresentationStart(username) {
-
+  _dispatchPresentationStart(username=null) {
+    this._dispatch(startPresentationSuccess(username));
   }
 
   _dispatchPresentationStop() {
-
+    this._dispatch(stopPresentationSuccess());
   }
 
   _dispatchSetSnapShot(snapShot) {
-
+    this._dispatch(setSnapShotLocal(snapShot));
   }
 
-  _dispatchSetPdfFile(pdfFile) {
-
+  _dispatchSetPdfFile(b64String) {
+    this._dispatch(setPdfFileB64(b64String));
   }
 
   _dispatchSetInfo(info) {
-
+    this._dispatch(setWhiteBoardInfo(info));
   }
 
   reqPresenter() {
@@ -77,6 +90,12 @@ export default class SocketWrapper {
   }
 
   syncSnapShot(snapShotJson) {
-    this._socket.empty(SocketEvent.SET_SNAPSHOT, snapShotJson);
+    this._socket.emit(SocketEvent.SET_SNAPSHOT, snapShotJson);
   }
+
+  syncPageNumber(pageNumber){
+    this._socket.emit(SocketEvent.SET_PAGE, pageNumber);
+  }
+
+
 }
