@@ -2,6 +2,19 @@ import {WhiteBoardAction} from '../constants/actionTypes';
 import pdfjs from 'pdfjs-dist-for-node';
 
 
+export function setSnapShot(snapShot){
+  return (dispatch, getState, room) => {
+    room.syncSnapShot(snapShot);
+  };
+}
+
+export function setSnapShotLocal(snapShot){
+  return {
+    snapShot,
+    type: WhiteBoardAction.SET_SHAPES
+  };
+}
+
 export function setPage(pageNumber) {
   return (dispatch, getState, room) =>{
     room.sendSetPage(pageNumber);
@@ -65,7 +78,7 @@ export function setFile(file) {
     dispatch(pdfConvertStart);
     dispatch(syncFile(file));
     let fileReader = new FileReader();
-    fileReader.onload = function (ev) {
+    fileReader.onload = function () {
       let result = fileReader.result;
       _extractImagesFromPdf(result, dispatch);
     };
@@ -86,7 +99,7 @@ function _arrayBufferToBase64(buffer) {
 export function syncFile(file) {
   return (dispatch, getState, room) => {
     let fileReader = new FileReader();
-    fileReader.onload = function (ev) {
+    fileReader.onload = function () {
       let result = fileReader.result;
       const b64String = _arrayBufferToBase64(result);
       room.syncFile(b64String);

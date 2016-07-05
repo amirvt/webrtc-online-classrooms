@@ -17,7 +17,7 @@ import proxy from 'proxy-middleware';
 const bundler = webpack(config);
 
 
-var proxyOptions = url.parse('http://localhost:3015/');
+let proxyOptions = url.parse('http://localhost:3015/');
 proxyOptions.route = '/api';
 
 // Run Browsersync and use middleware for Hot Module Replacement

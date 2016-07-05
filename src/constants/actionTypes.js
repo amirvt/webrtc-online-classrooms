@@ -23,6 +23,7 @@ export const WhiteBoardAction = {
   SET_IMAGES: "SET_IMAGES",
   RESET_PAGE: "RESET_PAGE",
   SET_PAGE: "SET_PAGE",
+  SET_SHAPES: "SET_SHAPES"
 };
 
 export const ADD_MESSAGE = "ADD_MESSAGE";

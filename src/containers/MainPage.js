@@ -68,11 +68,14 @@ MainPage.propTypes = {
   chatActions: PropTypes.object.isRequired,
   userActions: PropTypes.object.isRequired,
   tokenActions: PropTypes.object.isRequired,
+  whiteboadActions: PropTypes.object.isRequired,
   screenCamMode: PropTypes.string.isRequired,
   webCamMode: PropTypes.string.isRequired,
   roomInfo: PropTypes.object.isRequired,
   messages: PropTypes.array.isRequired,
-  users: PropTypes.array.isRequired
+  users: PropTypes.array.isRequired,
+  whiteBoardInfo: PropTypes.object.isRequired
+
 };
 
 function mapStateToProps(state) {

@@ -4,13 +4,16 @@ var N = require('./nuve');
 N.API.init(config.service.id, config.service.key, config.nuve_host);
 
 var express = require('express');
-var app = express.createServer();
-
-app.use(express.bodyParser());
-app.configure(function () {
-  app.use(express.logger());
-  app.use(express.static(__dirname + '/public'));
-});
+var app = express();
+var http = require('http');
+var io = require('socket.io')(http);
+var roomData = require('roomdata');
+var SocketEvent = require('./serverconstants').SocketEvent;
+// app.use(express.bodyParser());
+// app.configure(function () {
+//   app.use(express.logger());
+//   app.use(express.static(__dirname + '/public'));
+// });
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -89,5 +92,62 @@ app.post('/getOrCreateRoom/', function (req, res) {
   });
 });
 
+var rooms = [];
+
+function isPresenter(socket){
+  return roomData.get(socket, 'presenter') === socket.id;
+}
+
+io.on('connection', function (socket) {
+  socket.on(SocketEvent.JOIN_ROOM, function (roomName, username) {
+    socket.room = roomName;
+    socket.username = username;
+    roomData.joinRoom(socket, roomName);
+    socket.emit(SocketEvent.ROOM_INFO, JSON.stringify(roomData.get(socket, 'info')));
+  });
+
+  socket.on(SocketEvent.REQ_PRESENTER, function(){
+    var presenter = roomData.get(socket, 'presenter');
+    if(presenter) {
+      socket.emit(SocketEvent.REJECT_PRESENTER, '');
+    } else {
+      roomData.set(socket, 'presenter', socket.id);
+      socket.emit(SocketEvent.ACCEPT_PRESENTER, '');
+      socket.broadcast.to(socket.room).emit(SocketEvent.PRESENTATION_START, socket.username);
+    }
+  });
+
+  socket.on(SocketEvent.STOP_PRESENTER, function(){
+    var presenter = roomData.get(socket, 'presenter');
+    if(presenter) {
+      roomData.set(socket, 'presenter', null);
+      socket.broadcast.to(socket.room).emit(SocketEvent.PRESENTATION_STOP);
+    }
+  });
+
+  socket.on('disconnect', function(){
+    if(isPresenter(socket)) {
+      roomData.set(socket, 'presenter', null);
+      socket.broadcast.to(socket.room).emit(SocketEvent.PRESENTATION_STOP);
+    }
+  });
+
+  socket.on(SocketEvent.SET_SNAPSHOT, function (snapShot) {
+    if (isPresenter(socket)){
+      var info = roomData.get(socket, 'info');
+      info.snapShot = snapShot;
+      io.sockets.in(socket.room).emit(SocketEvent.SET_SNAPSHOT, socket.username, data);
+    }
+  });
+
+  socket.on(SocketEvent.SET_PDF_FILE, function (pdfFile) {
+    if (isPresenter(socket)){
+      var info = roomData.get(socket, 'info');
+      info.pdfFile = pdfFile;
+      io.sockets.in(socket.room).emit(SocketEvent.SET_PDF_FILE, socket.username, data);
+    }
+  });
+});
+
 app.listen(3015);
-console.log("listening on 3015")
+console.log("listening on 3015");

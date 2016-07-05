@@ -1,5 +1,5 @@
 import {WhiteBoardAction} from '../constants/actionTypes';
-export default function (state = {images: [], pageNumber: -1, numPages: 0}, action) {
+export default function (state = {images: [], pageNumber: -1, numPages: 0, snapShot: ""}, action) {
   switch (action.type) {
     case WhiteBoardAction.PDF_START:
       return state;
@@ -9,6 +9,8 @@ export default function (state = {images: [], pageNumber: -1, numPages: 0}, acti
       return {...state, pageNumber: 0, numPages: action.numPages};
     case WhiteBoardAction.SET_PAGE:
       return {...state, pageNumber: action.pageNumber};
+    case WhiteBoardAction.SET_SHAPES:
+      return {...state, snapShot: action.snapShot};
     default:
       return state;
   }

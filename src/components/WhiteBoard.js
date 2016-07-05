@@ -9,8 +9,10 @@ class WhiteBoard extends Component {
   constructor(props) {
     super(props);
     this._lc = null;
+    this._lcDrawEventUnSub = null;
     this.nextSlide = this.nextSlide.bind(this);
     this.prevSlide = this.prevSlide.bind(this);
+    this._lcInit = this._lcInit.bind(this);
   }
 
   nextSlide(e){
@@ -31,9 +33,25 @@ class WhiteBoard extends Component {
     }
   }
 
+  _lcDrawSub(){
+    if (!this._lcDrawEventUnSub && this._lc) {
+      this._lcDrawEventUnSub = this._lc.on('drawingChange', () => {
+        console.log("ayy");
+        this._lcDrawEventUnSub = this.props.whiteBoardActions.setSnapShot(JSON.stringify(this._lc.getSnapshot(['shapes'])));
+      });
+
+    }
+  }
+
+  _lcInit(lc){
+    this._lc = lc;
+    this._lcDrawSub();
+  }
+
 
   render() {
-    let {images, pageNumber} = this.props.whiteBoardInfo;
+    console.log("wb render");
+    let {images, pageNumber, snapShot} = this.props.whiteBoardInfo;
     let im;
     if (images.length !== 0) {
       // return (<img src={images[pageNumber]}/>);
@@ -41,11 +59,18 @@ class WhiteBoard extends Component {
       im.src = images[pageNumber];
       this._lc.setWatermarkImage(im);
     }
+    if (this._lc && snapShot) {
+        console.log("snapshot loaded!!");
+        this._lc.loadSnapshot(JSON.parse(snapShot));
+    }
+
+    this._lcDrawSub();
+
     return (
       <div>
         <LiterallyCanvas.LiterallyCanvasReactComponent
           imageURLPrefix="public/lc"
-          onInit={lc => {this._lc = lc; }}/>
+          onInit={this._lcInit}/>
         <Toolbar>
 
           <IconButton onTouchTap={this.prevSlide}>
@@ -68,7 +93,9 @@ class WhiteBoard extends Component {
 WhiteBoard.propTypes = {
   whiteBoardInfo: PropTypes.shape({
     images: PropTypes.array.isRequired,
-    pageNumber: PropTypes.number.isRequired
+    pageNumber: PropTypes.number.isRequired,
+    numPages: PropTypes.number.isRequired,
+    snapShot: PropTypes.string
   }).isRequired,
   whiteBoardActions: PropTypes.object.isRequired
 };
