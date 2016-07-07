@@ -23,7 +23,7 @@ This project is still under  development. A working feature-complete prototype w
 
 ##Setting up a development environment 
 
-1. Install a Licode server using the instructions at [http://lynckia.com/licode/install.html](http://lynckia.com/licode/install.html
+1. Install a Licode server using the instructions at [http://lynckia.com/licode/install.html](http://lynckia.com/licode/install.html)
 
     * You'll need to install this on a linux machine, Preferably Ubuntu 14. For development a virtual machine will work fine.
     * This can be the same server you deploy the application's server.
