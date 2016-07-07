@@ -3,18 +3,23 @@ var N = require('./nuve');
 
 N.API.init(config.service.id, config.service.key, config.nuve_host);
 
-var app = require('express')();
+var express = require('express')
+var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
 var roomData = require('roomdata');
-var SocketEvent = require('./serverconstants').SocketEvent;
+var SocketEvent = require('./../src/constants/serverconstants').SocketEvent;
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
 }));
 
+
+app.use(express.static(__dirname + '/../dist'));
+
+//TODO make into constant
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "http://localhost:3000");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");

@@ -1,7 +1,14 @@
-import {SocketEvent} from '../../server/serverconstants';
-import {setWhiteBoardInfo, stopPresentationSuccess, setSnapShotLocal, setPdfFileB64, startPresentationSuccess, setPageLocal, startPresentationReject} from '../actions/whiteBoardActions';
+import {SocketEvent, SERVER_IP} from '../constants/serverconstants'; // eslint-disable-line import/named
+import {
+  setWhiteBoardInfo,
+  stopPresentationSuccess,
+  setSnapShotLocal,
+  setPdfFileB64,
+  startPresentationSuccess,
+  setPageLocal,
+  startPresentationReject
+} from '../actions/whiteBoardActions';
 import io from 'socket.io-client';
-
 
 export default class SocketWrapper {
   constructor() {
@@ -17,8 +24,8 @@ export default class SocketWrapper {
   setUpSocket(roomName, username) {
     this._roomName = roomName;
     this._username = username;
-    this._socket = io('http://localhost:3015');
-    this._socket.on('connect',  () => {
+    this._socket = io(SERVER_IP);
+    this._socket.on('connect', () => {
       this._socket.emit(SocketEvent.JOIN_ROOM, roomName, username);
     });
     this._socket.on(SocketEvent.ROOM_INFO, (info) => {
@@ -57,7 +64,7 @@ export default class SocketWrapper {
     this._dispatch(startPresentationReject());
   }
 
-  _dispatchPresentationStart(username=null) {
+  _dispatchPresentationStart(username = null) {
     this._dispatch(startPresentationSuccess(username));
   }
 
@@ -93,7 +100,7 @@ export default class SocketWrapper {
     this._socket.emit(SocketEvent.SET_SNAPSHOT, snapShotJson);
   }
 
-  syncPageNumber(pageNumber){
+  syncPageNumber(pageNumber) {
     this._socket.emit(SocketEvent.SET_PAGE, pageNumber);
   }
 

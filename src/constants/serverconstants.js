@@ -11,4 +11,7 @@ var SocketEvent = {
   PRESENTATION_START: "PRESENTATION_START",
   SET_PAGE: "SET_PAGE"
 };
+var SERVER_IP = 'http://localhost:3015';
 module.exports.SocketEvent = SocketEvent;
+module.exports.SocketEvent = SocketEvent;
+module.exports.SERVER_IP = SERVER_IP;
