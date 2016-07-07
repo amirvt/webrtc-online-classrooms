@@ -15,7 +15,8 @@ A Small Project that leverages the Licode WebRTC communications platform to crea
 The Licode WebRTC communications platform is basically a media server that acts as an MCU. While WebRTC is traditionally peer to peer,
 full-mesh communications are not scalable. Basically a presenter cannot upload multiple video and audio streams to more than a few peers simultaneously
 due to bandwidth constraints. So instead the presenter uploads video and audio to the Licode server once and the server which will (presumably)
-have a higher bandwidth can send the streams to the peers
+have a higher bandwidth can send the streams to the peers.
+
 ##Features
 
 This project is still under  development. A working feature-complete prototype will be available by August 2016.
@@ -33,7 +34,7 @@ This project is still under  development. A working feature-complete prototype w
    git clone https://github.com/amirvt/webrtc-online-classrooms.git
    cd webrtc-online-classrooms
    ```
-4. Edit the project [config file](/server/config.js) to match your Licode server setup and change `SERVER_IP` in [/src/constants/serverconsts.js](/src/constants/serverconsts.js) to your node server's ip.  
+4. Edit the project [config file](/server/config.js) to match your Licode server setup and change `SERVER_IP` in [/src/constants/serverconstants.js](/src/constants/serverconstants.js) to your node server's ip.  
    In a production enviroment, you should set a new id and secret.  
 5. Run `npm install` in the root and [/server](/server)
 6. Run the server with `node server/index.js`
