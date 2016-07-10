@@ -4,6 +4,8 @@ import {Toolbar} from 'material-ui/Toolbar';
 import ChevronLeft from 'material-ui/svg-icons/navigation/chevron-left';
 import ChevronRight from 'material-ui/svg-icons/navigation/chevron-right';
 import IconButton from 'material-ui/IconButton';
+import Panel from '../components/Panel';
+
 
 class WhiteBoard extends Component {
   constructor(props) {
@@ -68,7 +70,7 @@ class WhiteBoard extends Component {
 
 
     return (
-      <div>
+      <Panel title="Whiteboard">
         <LiterallyCanvas.LiterallyCanvasReactComponent
           imageURLPrefix="public/lc"
           onInit={this._lcInit}
@@ -88,7 +90,7 @@ class WhiteBoard extends Component {
           <canvas id="the-canvas" style={{position: "absolute", right: "-3000px"}}>
           </canvas>
         </div>
-      </div>);
+      </Panel>);
   }
 }
 

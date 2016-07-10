@@ -21,7 +21,7 @@ export function getToken(username, roomName) {
     ).then(data => {
       dispatch(getTokenSuccess(username, roomName, data.token, data.roomId));
     }).catch(e => {
-      throw(e);
+      alert(e);
     });
   };
 }

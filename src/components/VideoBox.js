@@ -7,7 +7,7 @@ const VideoBox = props => {
   let tag = `${type}_TAG`;
   return (
     <Panel title={title}>
-      <div id={tag} style={{height: "80%"}}></div>
+      <div id={tag} style={{height: "83%"}}></div>
     </Panel>
   );
 };

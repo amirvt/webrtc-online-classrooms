@@ -81,7 +81,7 @@ app.post('/getOrCreateRoom/', function (req, res) {
       res.send({token: token, roomId: id});
     }, function (e) {
       res.status(500);
-      res.send(e);
+      res.send({error: e});
     });
   };
 
