@@ -22,7 +22,7 @@ ReactGridLayout = WidthProvider(ReactGridLayout);
 let layout = [
   {i: 'ul', x: 0, y: 0, w: 3, h: 6, minW: 2, minH: 3},
   {i: 'wb', x: 0, y: 6, w: 3, h: 6, minW: 2, minH: 3},
-  {i: 'sb', x: 3, y: 0, w: 6, h: 12, minW: 2, minH: 9},
+  {i: 'sb', x: 3, y: 0, w: 6, h: 12, static: true},
   {i: 'cb', x: 9, y: 0, w: 3, h: 12, minW: 2, minH: 3}
 ];
 
@@ -43,7 +43,7 @@ const MainPage = (props) => {
       />
 
       <ReactGridLayout className="layout" layout={layout}
-                       cols={12} rowHeight={(window.innerHeight - 200) /12} width={1200}
+                       cols={12} rowHeight={50} width={1200}
                        isDraggable={true} isResizable={true} draggableHandle=".panel-bar">
         <div key={"ul"} >
           <UserList users={props.users}/>
@@ -55,7 +55,7 @@ const MainPage = (props) => {
           <ChatBox chatActions={props.chatActions} roomInfo={props.roomInfo} messages={props.messages}/>
         </div>
         <div key={"sb"}>
-          {props.screenCamMode === "ON" ?
+          {props.screenCamMode !== "OFF" ?
             (<VideoBox title="Screen Capture" type={StreamType.SCREEN_CAM}/>) :
             (<WhiteBoard whiteBoardInfo={props.whiteBoardInfo} whiteBoardActions={props.whiteBoardActions}/>)}
         </div>

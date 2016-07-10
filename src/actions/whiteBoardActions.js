@@ -127,9 +127,10 @@ const _extractImagesFromPdf = function (pdfDataObject, dispatch, pageNumber = 0)
 
 export function setFile(file) {
   return (dispatch, getState) => {
-    if (getState().whiteBoardInfo.presentationMode !== "RECV") {
+    if (getState().whiteBoardInfo.presentationMode !== "ON") {
       return;
     }
+    console.log("!!!");
     dispatch(pdfConvertStart);
     dispatch(syncFile(file));
     let fileReader = new FileReader();

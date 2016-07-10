@@ -16,6 +16,14 @@ class ChatBox extends Component {
     };
     this.onMessageType = this.onMessageType.bind(this);
     this.handleMessageSubmit = this.handleMessageSubmit.bind(this);
+    this.ctrlEnter = this.ctrlEnter.bind(this);
+  }
+
+  ctrlEnter(e){
+    e.preventDefault();
+    if (e.ctrlKey && (e.key === 'Enter')) {
+      this.props.chatActions.sendMessage(this.state.message);
+    }
   }
 
   handleMessageSubmit(event) {
@@ -37,7 +45,8 @@ class ChatBox extends Component {
         <Divider/>
         <div style={{padding: '30px', position: "absolute", bottom: 0, width: "90%"}}>
           <TextField multiLine={true} hintText="Start typing your message"
-                     onChange={this.onMessageType.bind(this)}
+                     onChange={this.onMessageType}
+                     onKeyUp={this.ctrlEnter}
                      style={{width: "70%"}}/>
           <FloatingActionButton mini={true}
                                 style={{float: "right"}}

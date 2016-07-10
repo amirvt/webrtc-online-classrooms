@@ -124,7 +124,7 @@ export default class MyToolBar extends Component {
   uploadButton() {
     return (
       <span>
-          <IconButton label="Upload file" onTouchTap={() => this._fileInput.click()} disabled={this.props.presentationMode === "RECV"}>
+          <IconButton label="Upload file" onTouchTap={() => this._fileInput.click()} disabled={this.props.presentationMode !== "ON"}>
               <FileUpload/>
           </IconButton>
           <input
