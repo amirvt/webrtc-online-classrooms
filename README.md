@@ -27,7 +27,7 @@ This project is still under  development. A working feature-complete prototype w
 
     * You'll need to install this on a linux machine, Preferably Ubuntu 14. For development a virtual machine will work fine.
     * This can be the same server you deploy the application's server.
-2. Install NPM and Node
+2. Make sure you have NPM and Node installed.
 3. Clone this repo
 
    ```
@@ -39,7 +39,7 @@ This project is still under  development. A working feature-complete prototype w
 5. Run `npm install` in the root and [/server](/server)
 6. Run the server with `node server/index.js`
 7. To run the client in development mode using a webpack server use the `npm start -s` command (This will enable debugging middleware and hot reloading)  
-To build the client, run the `npm run build -s` command. This will build the app in the [/dist](/dist) directory. I've set up the express server to statically server the files in [/dist](/dist). So by default the client is on port 3015 on your signalling server.
+To build the client, run the `npm run build -s` command. This will build the app in the [/dist](/dist) directory. I've set up the express server to statically serve the files in [/dist](/dist). So by default the client is on port 3015 on your signalling server.
 
     If you're setting up everything on the same server you'll want to change the ports in [/tools/srcServer.js](/tools/srcServer.js) and [/tools/distServer.js](/tools/srcServer.js) to something other than 3000 as the Licode server defaults to 3000.
 

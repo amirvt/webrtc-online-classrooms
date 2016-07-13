@@ -1,8 +1,8 @@
 import {TokenAction} from '../constants/actionTypes';
-
+import {SERVER_IP} from '../constants/serverconstants';
 export function getToken(username, roomName) {
   return (dispatch) => {
-    fetch('http://local:3015/getOrCreateRoom/', {
+    fetch(`${SERVER_IP}/getOrCreateRoom/`, {
       method: "POST",
       mode: 'cors',
       headers: {

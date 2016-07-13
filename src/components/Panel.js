@@ -10,7 +10,7 @@ const Panel = props => {
   return (
     <Paper zDepth={1} style={style}>
       <AppBar title={title} className="panel-bar" iconElementRight={<IconButton><MoreVertIcon/></IconButton>} />
-      <div style={{height:"100%"}}>{props.children}</div>
+      {props.children}
     </Paper>
   );
 };

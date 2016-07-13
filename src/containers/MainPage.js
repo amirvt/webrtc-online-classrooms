@@ -22,7 +22,7 @@ ReactGridLayout = WidthProvider(ReactGridLayout);
 let layout = [
   {i: 'ul', x: 0, y: 0, w: 3, h: 6, minW: 2, minH: 3},
   {i: 'wb', x: 0, y: 6, w: 3, h: 6, minW: 2, minH: 3},
-  {i: 'sb', x: 3, y: 0, w: 6, h: 12, static: true},
+  {i: 'sb', x: 3, y: 0, w: 6, h: 12, isResizable: false},
   {i: 'cb', x: 9, y: 0, w: 3, h: 12, minW: 2, minH: 3}
 ];
 
