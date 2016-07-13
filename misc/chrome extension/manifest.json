@@ -1,0 +1,26 @@
+{
+   "background": {
+      "persistent": true,
+      "scripts": [ "script.js" ]
+   },
+   "browser_action": {
+      "default_icon": "lynckia_icon_16.png"
+   },
+   "description": "Extension to allow screen sharing in Licode applications.",
+   "externally_connectable": {
+      "matches": [ "*://*.dit.upm.es/*", "*://localhost/*"  ]
+   },
+   "icons": {
+      "128": "lynckia_icon_128.png",
+      "16": "lynckia_icon_16.png",
+      "48": "lynckia_icon_48.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAm33R+7NW447+thHox8b5IVmKohsiliZOSS+RltfO9rVF2+F6qP3H94fk/UgoyjC9rDtJFM81zRUWwHDzbH01VbQeOW7t/eP8/qsAZwXHbxSAEAO8EUvWGgTL50w3iyHAnLwhuCucV6qdbvQcamJBFt9Ohm18ooZfSg7phwMCZQ/8uwDu/DxjJsuKYseLPBXjkuQEzmQMGnZwxtXUDgsd9kU6/dj8YuRXcdqDykVTpdOBrdeHrJ6E4QRowHkYk++/lo2BaZLYpkSEy7uG7Tq+j/eYSrSnOfHKU0wU3zvk18vmA0VY/lCHreF9ApxpRV0RxaYugtyvM0EqvZiHvcB5iwIDAQAB",
+   "manifest_version": 2,
+   "minimum_chrome_version": "34",
+   "name": "Lynckia Screensharing",
+   "permissions": [ "desktopCapture" ],
+   "short_name": "Screen sharing for lynckia",
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "0.0.0.1"
+}
