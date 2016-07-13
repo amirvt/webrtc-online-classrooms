@@ -1,12 +1,18 @@
 var config = require('./config.js').default;
 var N = require('./nuve');
-
 N.API.init(config.service.id, config.service.key, config.nuve_host);
 
-var express = require('express')
+var fs = require('fs');
+var https = require('https');
+var privateKey  = fs.readFileSync(__dirname + '/sslcert/server.key', 'utf8');
+var certificate = fs.readFileSync(__dirname + '/sslcert/server.crt', 'utf8');
+var credentials = {key: privateKey, cert: certificate};
+
+var express = require('express');
 var app = express();
 var http = require('http').Server(app);
-var io = require('socket.io')(http);
+var httpsServer = https.createServer(credentials, app);
+var io = require('socket.io')(httpsServer);
 
 var roomData = require('roomdata');
 var SocketEvent = require('./../src/constants/serverconstants').SocketEvent;
@@ -189,3 +195,5 @@ io.on('connection', function (socket) {
 
 http.listen(3015);
 console.log("listening on 3015");
+httpsServer.listen(3016);
+console.log("https listening on 3016");
