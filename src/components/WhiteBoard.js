@@ -51,7 +51,8 @@ class WhiteBoard extends Component {
       // return (<img src={images[pageNumber]}/>);
       im = new Image();
       im.src = images[pageNumber];
-      this._lc.setWatermarkImage(im);
+      if (this._lc)
+        this._lc.setWatermarkImage(im);
     }
 
     if(presentationMode === "ON" && this._lc) {
