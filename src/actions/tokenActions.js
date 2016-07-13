@@ -1,5 +1,5 @@
 import {TokenAction} from '../constants/actionTypes';
-import {SERVER_IP} from '../constants/serverconstants';
+const  SERVER_IP = require('../constants/serverconstants').SERVER_IP;
 export function getToken(username, roomName) {
   return (dispatch) => {
     fetch(`${SERVER_IP}/getOrCreateRoom/`, {

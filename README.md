@@ -32,7 +32,8 @@ This project is still under  development. A working feature-complete prototype w
 
    ```
    git clone https://github.com/amirvt/webrtc-online-classrooms.git
-   cd webrtc-online-classrooms
+   cd webrtc-online-classrooms/
+   npm install
    ```
 4. Edit the project [config file](/server/config.js) to match your Licode server setup and change `SERVER_IP` in [/src/constants/serverconstants.js](/src/constants/serverconstants.js) to your node server's ip.  
    In a production enviroment, you should set a new id and secret.  
