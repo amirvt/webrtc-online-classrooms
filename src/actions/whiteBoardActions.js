@@ -100,7 +100,7 @@ const _extractImagesFromPdf = function (pdfDataObject, dispatch, pageNumber = 0)
 
         let canvas = document.getElementById('the-canvas');
         let context = canvas.getContext('2d');
-        context.clearRect(0, 0, canvas.width, canvas.height);
+        // context.clearRect(0, 0, canvas.width, canvas.height);
         canvas.height = viewport.height;
         canvas.width = viewport.width;
 

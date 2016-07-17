@@ -59,56 +59,56 @@ export default class Room {
     this._addStreamSubscribedListener();
   }
 
-  _addStreamSubscribedListener(){
-      this._room.addEventListener('stream-subscribed', streamEvent => {
-        let stream = streamEvent.stream;
-        let {type} = stream.getAttributes();
+  _addStreamSubscribedListener() {
+    this._room.addEventListener('stream-subscribed', streamEvent => {
+      let stream = streamEvent.stream;
+      let {type} = stream.getAttributes();
 
-        if (type === StreamType.SCREEN_CAM || type === StreamType.WEB_CAM) {
-          this._recvVideoStream(type);
-          stream.play(`${type}_TAG`);
-        } else if (type === StreamType.CHAT) {
-          stream.addEventListener('stream-data', event => {
-            let {username, type} = event.stream.getAttributes();
-            if (type === StreamType.CHAT) {
-              if (event.msg.type === "CHAT") {
-                this._addMessage(event.msg, username);
-                          }
-                      }
-                  });
-              }
-          });
+      if (type === StreamType.SCREEN_CAM || type === StreamType.WEB_CAM) {
+        this._recvVideoStream(type);
+        stream.play(`${type}_TAG`);
+      } else if (type === StreamType.CHAT) {
+        stream.addEventListener('stream-data', event => {
+          let {username, type} = event.stream.getAttributes();
+          if (type === StreamType.CHAT) {
+            if (event.msg.type === "CHAT") {
+              this._addMessage(event.msg, username);
+            }
+          }
+        });
       }
+    });
+  }
 
-  _addStreamRemovedEventListener(){
-      this._room.addEventListener('stream-removed', streamEvent => {
+  _addStreamRemovedEventListener() {
+    this._room.addEventListener('stream-removed', streamEvent => {
 
-        let stream = streamEvent.stream;
+      let stream = streamEvent.stream;
 
-        //TODO generalize
-        let {type, username} = stream.getAttributes();
-        if (username !== this._roomInfo.username && (type === StreamType.SCREEN_CAM || type === StreamType.WEB_CAM)) {
-          this._dispatchEndVideoStream(type);
-        } else if (type === StreamType.CHAT) {
-          this._removeUser(username);
-              }
-          });
+      //TODO generalize
+      let {type, username} = stream.getAttributes();
+      if (username !== this._roomInfo.username && (type === StreamType.SCREEN_CAM || type === StreamType.WEB_CAM)) {
+        this._dispatchEndVideoStream(type);
+      } else if (type === StreamType.CHAT) {
+        this._removeUser(username);
       }
+    });
+  }
 
-  _addStreamAddedEventListener(){
-      this._room.addEventListener('stream-added', streamEvent => {
-        let streams = [];
-        streams.push(streamEvent.stream);
-        this._subscribeToStreams(streams);
-          });
-      }
+  _addStreamAddedEventListener() {
+    this._room.addEventListener('stream-added', streamEvent => {
+      let streams = [];
+      streams.push(streamEvent.stream);
+      this._subscribeToStreams(streams);
+    });
+  }
 
-  _addRoomConnectedEventListener(){
-      this._room.addEventListener("room-connected", roomEvent => {
-        this._room.publish(this._chatStream);
-        this._subscribeToStreams(roomEvent.streams);
-          });
-      }
+  _addRoomConnectedEventListener() {
+    this._room.addEventListener("room-connected", roomEvent => {
+      this._room.publish(this._chatStream);
+      this._subscribeToStreams(roomEvent.streams);
+    });
+  }
 
   startWebCamStream() {
     this._startVideoStream(StreamType.WEB_CAM);
