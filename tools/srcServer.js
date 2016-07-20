@@ -11,14 +11,11 @@ import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 import config from '../webpack.config.dev';
 
-import url from 'url';
-import proxy from 'proxy-middleware';
+
 
 const bundler = webpack(config);
 
 
-let proxyOptions = url.parse('http://localhost:3015/');
-proxyOptions.route = '/api';
 
 // Run Browsersync and use middleware for Hot Module Replacement
 browserSync({
@@ -26,6 +23,7 @@ browserSync({
   ui: {
     port: 3001
   },
+  https: true,
   server: {
     baseDir: 'src',
 
@@ -47,8 +45,7 @@ browserSync({
       }),
 
       // bundler should be the same as above
-      webpackHotMiddleware(bundler),
-      proxy(proxyOptions)
+      webpackHotMiddleware(bundler)
     ]
   },
 

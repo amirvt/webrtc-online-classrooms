@@ -72,7 +72,7 @@ app.post('/createToken/:room', function (req, res) {
   N.API.createToken(room, username, role, function (token) {
     res.send(token);
   }, function (e) {
-    res.status(500);
+    res.status(504);
     res.send("Internal Server Error");
   });
 });
@@ -86,7 +86,7 @@ app.post('/getOrCreateRoom/', function (req, res) {
     N.API.createToken(id, username, role, function (token) {
       res.send({token: token, roomId: id});
     }, function (e) {
-      res.status(500);
+      res.status(505);
       res.send({error: e});
     });
   };
@@ -100,12 +100,12 @@ app.post('/getOrCreateRoom/', function (req, res) {
       N.API.createRoom(roomName, function (room) {
         createToken(room._id, username, role);
       }, function (e) {
-        res.status(500);
+        res.status(501);
         res.send(e);
       });
     }
   }, function (e) {
-    res.status(500);
+    res.status(502);
     res.send(e);
   });
 });

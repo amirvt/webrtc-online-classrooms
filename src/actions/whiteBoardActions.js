@@ -88,37 +88,59 @@ export function resetNumPages(numPages) {
   };
 }
 
+const asyncLoop = function (o) {
+  let i = -1;
+
+  let loop = function () {
+    i++;
+    if (i == o.length) {
+      o.callback();
+      return;
+    }
+    setTimeout(o.functionToLoop(loop, i), 0);
+  };
+  loop();//init
+};
+
 const _extractImagesFromPdf = function (pdfDataObject, dispatch, pageNumber = 0) {
   pdfjs.getDocument(pdfDataObject).then(function (pdf) {
     dispatch(resetNumPages(pdf.numPages));
     let imageDatas = [];
-    for (let i = 1; i <= pdf.numPages; i++) {
 
-      pdf.getPage(i).then(function (page) {
-        let scale = 1;
-        let viewport = page.getViewport(scale);
+      asyncLoop({
+        length: pdf.numPages,
+        functionToLoop:  (loop, i) => {
+          pdf.getPage(i+1).then(function (page) {
+            let scale = 1;
+            let viewport = page.getViewport(scale);
 
-        let canvas = document.getElementById('the-canvas');
-        let context = canvas.getContext('2d');
-        // context.clearRect(0, 0, canvas.width, canvas.height);
-        canvas.height = viewport.height;
-        canvas.width = viewport.width;
+            let canvas = document.getElementById('the-canvas');
+            let context = canvas.getContext('2d');
+            // context.clearRect(0, 0, canvas.width, canvas.height);
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
 
 
-        let task = page.render({canvasContext: context, viewport: viewport});
-        task.promise.then(function () {
-          let imageData = canvas.toDataURL();
-          imageDatas.push(imageData);
+            let task = page.render({canvasContext: context, viewport: viewport});
+            task.promise.then(function () {
+              let imageData = canvas.toDataURL();
+              imageDatas.push(imageData);
 
-        }, function (e) {
-          throw(e);
-        }).then(function () {
-          dispatch(setImages(imageDatas));
-          dispatch(setPageLocal(pageNumber));
-        });
+            }, function (e) {
+              throw(e);
+            }).then(function () {
+              if (pdf.numPages === i + 1) {
+                dispatch(setImages(imageDatas));
+                dispatch(setPageLocal(pageNumber));
+              }
+              loop();
+            });
 
+          }).catch(e => alert(e));
+
+        }
       });
-    }
+
 
   }, function (e) {
     throw(e);
