@@ -94,10 +94,11 @@ const asyncLoop = function (o) {
   let loop = function () {
     i++;
     if (i == o.length) {
-      o.callback();
+      if (o.callback)
+        o.callback();
       return;
     }
-    setTimeout(o.functionToLoop(loop, i), 0);
+    o.functionToLoop(loop, i);
   };
   loop();//init
 };
