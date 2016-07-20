@@ -104,6 +104,7 @@ const asyncLoop = function (o) {
 };
 
 const _extractImagesFromPdf = function (pdfDataObject, dispatch, pageNumber = 0) {
+  dispatch(setPageLocal(pageNumber));
   pdfjs.getDocument(pdfDataObject).then(function (pdf) {
     dispatch(resetNumPages(pdf.numPages));
     let imageDatas = [];
@@ -130,10 +131,9 @@ const _extractImagesFromPdf = function (pdfDataObject, dispatch, pageNumber = 0)
             }, function (e) {
               throw(e);
             }).then(function () {
-              if (pdf.numPages === i + 1) {
+              // if (true) {
                 dispatch(setImages(imageDatas));
-                dispatch(setPageLocal(pageNumber));
-              }
+              // }
               loop();
             });
 

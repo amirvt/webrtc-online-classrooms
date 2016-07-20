@@ -4,7 +4,7 @@ export default function (state = {images: [], pageNumber: -1, numPages: 0, snapS
     case WhiteBoardAction.PDF_START:
       return state;
     case WhiteBoardAction.SET_IMAGES:
-      return {...state, images: [...action.images], pageNumber: 0};
+      return {...state, images: [...action.images]};
     case WhiteBoardAction.RESET_NUMPAGES:
       return {...state, numPages: action.numPages};
     case WhiteBoardAction.SET_PAGE:
