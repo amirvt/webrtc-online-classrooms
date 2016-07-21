@@ -7,7 +7,7 @@ if (!licode_config){
   console.error("Could not find licode");
   process.exit(-1);
 }
-let serverConfig = require("../server/config.json");
+let serverConfig = require(__dirname + "/../server/config.json");
 serverConfig.service.id = licode_config.nuve.superserviceID;
 serverConfig.service.key = licode_config.nuve.superserviceKey;
 serverConfig.nuve_host = "http://localhost:3000/";
