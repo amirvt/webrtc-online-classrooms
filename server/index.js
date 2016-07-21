@@ -1,4 +1,4 @@
-var config = require('./config.js').default;
+var config = require('./config.json');
 var N = require('./nuve');
 N.API.init(config.service.id, config.service.key, config.nuve_host);
 
