@@ -11,4 +11,4 @@ module.exports.SocketEvent = {
   PRESENTATION_START: "PRESENTATION_START",
   SET_PAGE: "SET_PAGE"
 };
-module.exports.SERVER_IP = require(__dirname + '/../../config.json').serverIp;
+module.exports.SERVER_IP = require('../config.json').serverIp;

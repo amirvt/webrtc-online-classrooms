@@ -1,4 +1,4 @@
-var globalConfig = require('../config');
+var globalConfig = require('../src/config');
 
 const config = {};
 

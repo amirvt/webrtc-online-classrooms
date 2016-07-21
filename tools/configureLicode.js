@@ -17,7 +17,7 @@ if (!licode_config){
   console.error("Could not find licode");
   process.exit(-1);
 }
-const config = require(__dirname + "/../config.json");
+const config = require("../src/config.json");
 config.service.ID = licode_config.nuve.superserviceID;
 config.service.Key = licode_config.nuve.superserviceKey;
 
@@ -25,7 +25,7 @@ prompt("What's your server ip? (example: https://192.168.193.131:3016) ", (input
   config.serverIp = input;
   config.licodeIp = "http://localhost:3000/";
   const str = JSON.stringify(config, null, 2);
-  fs.writeFile(__dirname + "/../config.json", str, function (err) {
+  fs.writeFile(__dirname + "/../src/config.json", str, function (err) {
     if(err){
       console.error("Error writing to config.json");
       process.exit(-1);
