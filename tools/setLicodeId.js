@@ -23,6 +23,7 @@ config.service.Key = licode_config.nuve.superserviceKey;
 
 prompt("What's your server ip? (example: https://192.168.193.131:3016) ", (input) => {
   config.serverIp = input;
+  config.licodeIp = "http://localhost:3000/";
   const str = JSON.stringify(config, null, 2);
   fs.writeFile(__dirname + "/../config.json", str, function (err) {
     if(err){
