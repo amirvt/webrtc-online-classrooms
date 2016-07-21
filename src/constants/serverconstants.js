@@ -1,4 +1,4 @@
-var SocketEvent = {
+module.exports.SocketEvent = {
   JOIN_ROOM: "JOIN_ROOM",
   ROOM_INFO: "ROOM_INFO",
   REQ_PRESENTER: "REQ_PRESENTER",
@@ -11,7 +11,4 @@ var SocketEvent = {
   PRESENTATION_START: "PRESENTATION_START",
   SET_PAGE: "SET_PAGE"
 };
-var SERVER_IP = require('../../config').serverIp;
-module.exports.SocketEvent = SocketEvent;
-module.exports.SERVER_IP = SERVER_IP;
-module.exports.HTTP_SERVER_IP = HTTP_SERVER_IP;
+module.exports.SERVER_IP = require('../../config').serverIp;

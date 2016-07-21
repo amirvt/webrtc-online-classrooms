@@ -153,7 +153,6 @@ export function setFile(file) {
     if (getState().whiteBoardInfo.presentationMode !== "ON") {
       return;
     }
-    console.log("!!!");
     dispatch(pdfConvertStart);
     dispatch(syncFile(file));
     let fileReader = new FileReader();

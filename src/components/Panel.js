@@ -18,7 +18,9 @@ const Panel = props => {
 
 Panel.propTypes = {
   title: PropTypes.string,
-  style: PropTypes.object
+  style: PropTypes.object,
+  children: React.PropTypes.node
+
 };
 
 Panel.defaultProps = {
