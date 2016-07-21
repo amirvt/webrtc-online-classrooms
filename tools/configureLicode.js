@@ -8,10 +8,10 @@ if (!licode_config){
   process.exit(-1);
 }
 let serverConfig = require("../server/config.json");
-serverConfig.service.ID = licode_config.nuve.superserviceID;
-serverConfig.service.Key = licode_config.nuve.superserviceKey;
+serverConfig.service.id = licode_config.nuve.superserviceID;
+serverConfig.service.key = licode_config.nuve.superserviceKey;
 const str = JSON.stringify(serverConfig, null, 2);
-fs.writeFile(__dirname + "/../src/config.json", str, function (err) {
+fs.writeFile(__dirname + "/../server/config.json", str, function (err) {
   if(err){
     console.error("Error writing to config.json");
     process.exit(-1);
