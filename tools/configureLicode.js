@@ -10,6 +10,8 @@ if (!licode_config){
 let serverConfig = require("../server/config.json");
 serverConfig.service.id = licode_config.nuve.superserviceID;
 serverConfig.service.key = licode_config.nuve.superserviceKey;
+serverConfig.nuve_host = "http://localhost:3000/";
+
 const str = JSON.stringify(serverConfig, null, 2);
 fs.writeFile(__dirname + "/../server/config.json", str, function (err) {
   if(err){
