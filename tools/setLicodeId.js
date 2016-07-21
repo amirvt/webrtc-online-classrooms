@@ -1,3 +1,17 @@
+const fs = require('fs');
+
+function prompt(question, callback) {
+  var stdin = process.stdin,
+    stdout = process.stdout;
+
+  stdin.resume();
+  stdout.write(question);
+
+  stdin.once('data', function (data) {
+    callback(data.toString().trim());
+  });
+}
+
 const licode_config = require(process.env['HOME'] + '/licode/licode_config.js');
 if (!licode_config){
   console.log("Could not find licode");
@@ -6,10 +20,15 @@ if (!licode_config){
 const config = require("../config.json");
 config.service.ID = licode_config.nuve.superserviceID;
 config.service.Key = licode_config.nuve.superserviceKey;
-const str = JSON.stringify(config, null, 2);
-require('fs').writeFile("../config.json", str, function (err) {
-  if(err){
-    console.log("Error writing to config.json");
-    exit(-1);
-  }
+
+prompt("What's your server ip? (example: https://192.168.193.131:3016) ", (input) => {
+  config.serverIp = input;
+  const str = JSON.stringify(config, null, 2);
+  fs.writeFile(__dirname + "/../config.json", str, function (err) {
+    if(err){
+      console.log("Error writing to config.json");
+      exit(-1);
+    }
+    process.exit();
+  });
 });
