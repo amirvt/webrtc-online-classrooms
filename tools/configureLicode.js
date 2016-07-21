@@ -17,7 +17,7 @@ if (!licode_config){
   console.error("Could not find licode");
   process.exit(-1);
 }
-const config = require("../config.json");
+const config = require(__dirname + "/../config.json");
 config.service.ID = licode_config.nuve.superserviceID;
 config.service.Key = licode_config.nuve.superserviceKey;
 
