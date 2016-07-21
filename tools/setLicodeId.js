@@ -1,4 +1,4 @@
-const licode_config = require('~/licode/licode_config.js');
+const licode_config = require(process.env['HOME'] + '/licode/licode_config.js');
 if (!licode_config){
   console.log("Could not find licode");
   exit(-1);
