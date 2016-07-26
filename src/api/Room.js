@@ -82,13 +82,11 @@ export default class Room {
 
   _addStreamRemovedEventListener() {
     this._room.addEventListener('stream-removed', streamEvent => {
-
       let stream = streamEvent.stream;
-
       //TODO generalize
       let {type, username} = stream.getAttributes();
       if (username !== this._roomInfo.username && (type === StreamType.SCREEN_CAM || type === StreamType.WEB_CAM)) {
-        this._dispatchEndVideoStream(type);
+        // this._dispatchEndVideoStream(type);
       } else if (type === StreamType.CHAT) {
         this._removeUser(username);
       }

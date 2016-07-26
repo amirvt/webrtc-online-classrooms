@@ -23,17 +23,20 @@ class ChatBox extends Component {
     e.preventDefault();
     if (e.ctrlKey && (e.key === 'Enter')) {
       this.props.chatActions.sendMessage(this.state.message);
+      this.setState({message: ""});
     }
   }
 
   handleMessageSubmit(event) {
     event.preventDefault();
     this.props.chatActions.sendMessage(this.state.message);
+    this.setState({message: ""});
   }
 
 
   onMessageType(event) {
-    this.state = {message: event.target.value};
+    // this.state = {message: event.target.value};
+    this.setState({message: event.target.value});
   }
 
   render() {
@@ -47,7 +50,9 @@ class ChatBox extends Component {
           <TextField multiLine={true} hintText="Start typing your message"
                      onChange={this.onMessageType}
                      onKeyUp={this.ctrlEnter}
-                     style={{width: "70%"}}/>
+                     style={{width: "70%"}}
+                     value={this.state.message}
+          />
           <FloatingActionButton mini={true}
                                 style={{float: "right"}}
                                 onTouchTap={this.handleMessageSubmit}

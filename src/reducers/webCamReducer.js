@@ -4,7 +4,7 @@ export default function (state = 'OFF', action) {
     case WebCamAction.START:
       return 'ON';
     case WebCamAction.RECV:
-      return 'RECV';
+      return state;
     case WebCamAction.OFF:
       return 'OFF';
     default:
