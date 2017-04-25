@@ -1,9 +1,9 @@
-#WebRTC Online Classrooms
+# WebRTC Online Classrooms
 
 
 A Small Project that leverages the Licode WebRTC communications platform to create virtual classrooms using the relatively new WebRTC standard.
 
-##Technologies
+## Technologies
 * [react.js](https://facebook.github.io/react/) - a javascript library for building user interfaces
 * [redux.js](http://redux.js.org/) - a javascript library for managing application state
 * [material-ui](http://material-ui.com/) - s set of react components
@@ -11,17 +11,17 @@ A Small Project that leverages the Licode WebRTC communications platform to crea
 * [socket.io](http://socket.io/) - the whiteboard uses web sockets instead of WebRTC.
 * [The Licode WebRTC communications platform](http://lynckia.com/licode/). 
 
-###The Licode WebRTC communications platform
+### The Licode WebRTC communications platform
 The Licode WebRTC communications platform is basically a media server that acts as an MCU. While WebRTC is traditionally peer to peer,
 full-mesh communications are not scalable. Basically a presenter cannot upload multiple video and audio streams to more than a few peers simultaneously
 due to bandwidth constraints. So instead the presenter uploads video and audio to the Licode server once and the server which will (presumably)
 have a higher bandwidth can send the streams to the peers.
 
-##Features
+## Features
 
 This project is still under  development. A working feature-complete prototype will be available by August 2016.
 
-##Setting up a development environment 
+## Setting up a development environment 
 
 1. Install a Licode server using the instructions at [http://lynckia.com/licode/install.html](http://lynckia.com/licode/install.html)
 
@@ -47,10 +47,10 @@ To build the client, run the `npm run build -s` command. This will build the app
 
 
 
-##Setting up https
+## Setting up https
 
 
-###Setting up https for the Licode server
+### Setting up https for the Licode server
 
 You'll need to do this to be able to use screen capturing.
 
